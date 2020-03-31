@@ -609,6 +609,7 @@ my $jobs=1;
 my $trust_all=0;
 my $directory=getcwd();
 my $terminal=-t STDOUT && eval{require IO::Pty::Easy;IO::Pty::Easy->import();1;};
+my $erase_line=$terminal && eval{require Term::Cap;my $t=Term::Cap->Tgetent();$t->Tputs('ce');};
 
 my $HOME_MR_CONFIG = "$ENV{HOME}/.mrconfig";
 $ENV{MR_CONFIG}=find_mrconfig();
@@ -758,18 +759,20 @@ sub terminal_friendly_spawn {
 	my $quiet = shift;
 	my $minimal = shift;
 	my $jobs = shift;
-	my $continous = !$quiet && $minimal && 1 == $jobs;
+	my $continuous = !$quiet && $minimal && 1 == $jobs;
 	my $output = "";
-	my $continous_output = 0;
+	my $continuous_output = 0;
 	if ($terminal) {
 		my $pty = IO::Pty::Easy->new;
 		$pty->spawn($sh);
-		if ($continous) {
+		if ($continuous) {
+			$| = 1;
+			print "$actionmsg$erase_line\r" if $actionmsg;
 			while ($pty->is_active) {
-				my $data = $pty->read();
+				my $data = $pty->getline();
 				if (defined $data && $data ne '') {
-					print "$actionmsg\n" if ($actionmsg && !$continous_output);
-					$continous_output = 1;
+					print "\n" if ($actionmsg && !$continuous_output);
+					$continuous_output = 1;
 					print $data;
 				}
 			}
@@ -794,7 +797,7 @@ sub terminal_friendly_spawn {
 		print "$actionmsg\n" if $actionmsg;
 		print $output;
 	}
-	return ($ret, ($output || $continous_output) ? 1 : 0);
+	return ($ret, ($output || $continuous_output) ? 1 : 0);
 }
 
 sub action {
@@ -1924,6 +1927,7 @@ sub check {
 
 sub init {
 	$SIG{INT}=sub {
+		print STDERR "$erase_line" if defined $erase_line && $terminal && !$quiet && $minimal && 1 == $jobs;
 		print STDERR "mr: interrupted\n";
 		exit 2;
 	};
@@ -2135,13 +2139,13 @@ vcsh_clean =
 	fi
 
 svn_status = svn status "$@"
-git_status = git status -s "$@" || true; git --no-pager log --branches --not --remotes --simplify-by-decoration --decorate --oneline || true; git stash list
+git_status = git status -s "$@" || true; git --no-pager log --branches --not --remotes --simplify-by-decoration --decorate --oneline || true; git --no-pager stash list
 bzr_status = bzr status --short "$@"; bzr missing
 cvs_status = cvs -q status | grep -E '^(File:.*Status:|\?)' | grep -v 'Status: Up-to-date'
 hg_status  = hg status "$@"; hg summary --quiet | grep -v 'parent: 0:'
 darcs_status = darcs whatsnew -ls "$@" || true
 fossil_status = fossil changes "$@"
-vcsh_status = vcsh run "$MR_REPO" git -c status.relativePaths=false status -s "$@" || true
+vcsh_status = vcsh status "$MR_REPO" "$@" || true
 veracity_status = vv status "$@"
 
 svn_commit = svn commit "$@"
@@ -2258,12 +2262,13 @@ git_bare_register =
 	echo "Registering git url: $url in $MR_CONFIG"
 	mr -c "$MR_CONFIG" config "`pwd`" checkout="git clone --bare '$url' '$MR_REPO'"
 vcsh_register =
-	url="`LC_ALL=C vcsh run "$MR_REPO" git config --get remote.origin.url`" || true
+	mr_repo_basename=`basename "$MR_REPO" .git`
+	url="`LC_ALL=C vcsh run "$mr_repo_basename" git config --get remote.origin.url`" || true
 	if [ -z "$url" ]; then
 		error "cannot determine git url"
 	fi
 	echo "Registering git url: $url in $MR_CONFIG"
-	mr -c "$MR_CONFIG" config "`pwd`" checkout="vcsh clone '$url' '$MR_REPO'"
+	mr -c "$MR_CONFIG" config "`pwd`" checkout="vcsh clone '$url' '$mr_repo_basename'"
 fossil_register =
 	url=`fossil remote-url`
 	repo=`fossil info | grep repository | sed -e 's/repository:*.//g' -e 's/ //g'`

@@ -1,4 +1,38 @@
-myrepos (1.20151023) UNRELEASED; urgency=medium
+myrepos (1.20160123) UNRELEASED; urgency=medium
+
+  * Strip .git extension when registering vsch repositories.
+    Thanks, Don March
+  * Disable git pager when mr status runs git stash list.
+  * Added stow library. This lets dotfiles in repositories managed by mr
+    be symlinked into the home directory by GNU stow.
+    Thanks, Sean Whitton and Adam Spiers.
+
+ -- Joey Hess <id@joeyh.name>  Sat, 02 Apr 2016 15:10:58 -0400
+
+myrepos (1.20160122) unstable; urgency=medium
+
+  * Fix one missing call to safe_abs_path.
+    Thanks, Chris Arndt
+
+ -- Joey Hess <id@joeyh.name>  Fri, 22 Jan 2016 18:44:56 -0400
+
+myrepos (1.20151206) unstable; urgency=medium
+
+  [ Paul Wise]
+  * Improve output handling
+  * Clean up debian/control
+  * Fix typos
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 06 Dec 2015 07:11:40 +0100
+
+myrepos (1.20151101) unstable; urgency=medium
+
+  * Allow running of mr via `mr --force-env` when within vcsh context via
+    `vcsh enter foo`. Closes: #786736
+
+ -- Richard Hartmann <richih@debian.org>  Sun, 01 Nov 2015 22:17:34 +0100
+
+myrepos (1.20151023) unstable; urgency=medium
 
   * hg push exits 1 on non-error, apparently only 255 is used for actual errors.
     Deal with this unusual behavior. Thanks, Ivan Perez.
@@ -257,7 +291,7 @@ mr (1.04) unstable; urgency=low
 mr (1.03) unstable; urgency=low
 
   * Added git-subtree library. Thanks, Svend Sorensen
-  * Now --quiet supresses all output from commands run, as well
+  * Now --quiet suppresses all output from commands run, as well
     as from mr, unless a command fails. Closes: #529296
 
  -- Joey Hess <joeyh@debian.org>  Sun, 01 May 2011 19:09:35 -0400
@@ -587,7 +621,7 @@ mr (0.15) unstable; urgency=low
     Closes: #452467
 
   [ Joey Hess ]
-  * Add a warning about runing too many jobs at a time.
+  * Add a warning about running too many jobs at a time.
 
  -- Joey Hess <joeyh@debian.org>  Sun, 25 Nov 2007 13:13:47 -0500
 
@@ -644,7 +678,7 @@ mr (0.9) unstable; urgency=low
 
     The old style unsplit actions are still supported, and are what most
     mrconfig files will still use; this change is fully backwards compatible.
-  * Changed some things in the enviroment for the register action.
+  * Changed some things in the environment for the register action.
     It's now run in the directory that the user specifies, and MR_REPO
     is set to contain the basename of the directory that the checkout
     command should check out. These changes should be backware compatible

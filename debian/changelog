@@ -1,4 +1,67 @@
-myrepos (1.20160123) UNRELEASED; urgency=medium
+myrepos (1.20180727) UNRELEASED; urgency=medium
+
+  [ Joey Hess ]
+  * Clarify documentation about multi-line shell commands in mrconfig file.
+    Closes: #685002
+
+  [ lintian-brush ]
+  * Move upstream name/contact fields to debian/copyright
+
+  [ Sean Whitton ]
+  * dgit plugin: pass -p to 'dgit fetch'.
+    Ensures that 'dgit fetch' will work if the currently checked out
+    branch does not include debian/control.
+
+ -- Joey Hess <id@joeyh.name>  Tue, 21 Jan 2020 15:12:43 -0400
+
+myrepos (1.20180726) unstable; urgency=medium
+
+  [ Andrew Bradford ]
+  * Suggest perl-doc (Closes: #813738)
+
+  [ Mark Haber ]
+  * Fix hours_since for git fake bare repos (Closes: #828827)
+
+  [ Tom Hoover ]
+  * Fix 'no defined update command error' in example config
+
+  [ Pavel Nakonechnyi ]
+  * More meaningful names for temporary files
+
+  [ Paul Wise ]
+  * Mitigate vulns caused by git code execution (Closes: #840014, CVE-2018-7032)
+  * Migrate from ack-grep to ack (Closes: #849600)
+  * More reliable output supervision
+  * Allow prepending commands to existing commands
+  * Allow for fallback to default commands
+  * Add support for caching command output
+  * Add graph, remote, upgrade extensions
+  * Improve the status output for CVS
+  * Improve the git-cvs extension
+  * Add shell extension to maintain a repo status cache
+  * git registration improvements
+  * webcheckout: prefer https transport
+  * Suggest more tools that are used
+  * Various packaging cleanups
+
+ -- Paul Wise <pabs@debian.org>  Thu, 26 Jul 2018 14:14:21 +0800
+
+myrepos (1.20171231) unstable; urgency=medium
+
+  [ Joey Hess ]
+  * Fix undefined value warning when using -j.
+
+  [ Paul Wise ]
+  * Join the Debian package maintainers
+  * Bump Standards-Version, no changes needed
+
+  [ Joey Hess ]
+  * Improve error message when system exits -1. This was incorrectly
+    displayed as a signal when in fact the program could not be run.
+
+ -- Joey Hess <id@joeyh.name>  Sun, 31 Dec 2017 11:56:27 -0400
+
+myrepos (1.20170129) unstable; urgency=medium
 
   * Strip .git extension when registering vsch repositories.
     Thanks, Don March
@@ -6,8 +69,12 @@ myrepos (1.20160123) UNRELEASED; urgency=medium
   * Added stow library. This lets dotfiles in repositories managed by mr
     be symlinked into the home directory by GNU stow.
     Thanks, Sean Whitton and Adam Spiers.
+  * cvs_status: do not fail when all files are up to date.
+    Thanks, Paul Wise.
+  * Added dgit plugin.
+    Thanks, Sean Whitton.
 
- -- Joey Hess <id@joeyh.name>  Sat, 02 Apr 2016 15:10:58 -0400
+ -- Joey Hess <id@joeyh.name>  Sun, 29 Jan 2017 14:14:19 -0400
 
 myrepos (1.20160122) unstable; urgency=medium
 
@@ -128,7 +195,7 @@ myrepos (1.20140613) unstable; urgency=medium
 
 myrepos (1.20140227) unstable; urgency=medium
 
-  * Avoid using man -l, relying on both versions of man for linux working
+  * Avoid using man -l, relying on both versions of man for Linux working
     when a file is passed, with no switches.
   * When blocking control codes in untrusted mrconfig files, ignore
     ones inside comments. (Thanks, Philipp Ittershagen)
@@ -198,7 +265,7 @@ mr (1.13) unstable; urgency=low
 mr (1.12) unstable; urgency=low
 
   * Ignore nonzero exit status of hg pull, which can happen
-    when there were no changes to pull. Closes: #661870 
+    when there were no changes to pull. Closes: #661870
   * Add vcsh to Suggests.
   * Recognize a repo with a .git file as a git repo.
   * Improve bzr register's heuristics to determine upstream repo.
@@ -237,7 +304,7 @@ mr (1.08) unstable; urgency=low
 mr (1.07) unstable; urgency=low
 
   * Added support for vcsh, enable with: include = cat /usr/share/mr/vcsh
-    Thanks, Richard Hartmann 
+    Thanks, Richard Hartmann
   * Block tty control codes in untrusted mr config files.
   * Correct printing of line numbers when includes are used. Closes: #650952
   * The previous fix for chaining to absolute paths broke chaining to relative
@@ -254,7 +321,7 @@ mr (1.07) unstable; urgency=low
 
 mr (1.06) unstable; urgency=low
 
-  * Fix propigation of failure from pre and post hooks and from fixups.
+  * Fix propagation of failure from pre and post hooks and from fixups.
   * Support chaining to absolute paths.
   * Add support for skip = lazy, a mode where mr only operates on repositories
     that are checked out.
@@ -442,7 +509,7 @@ mr (0.38) unstable; urgency=low
 
 mr (0.37) unstable; urgency=low
 
-  * Add "gitless" file to lib. 
+  * Add "gitless" file to lib.
     This adds a special type of git repository, where the .git directory
     is stored on a file server, to avoid wasting space with it on the client.
   * Revert buggy change to directory printing code.
@@ -451,7 +518,7 @@ mr (0.37) unstable; urgency=low
 
 mr (0.36) unstable; urgency=low
 
-  * Add webcheckout command. See <http://kitenet.net/~joey/rfc/rel-vcs/>
+  * Add webcheckout command. See <https://joeyh.name/rfc/rel-vcs/>
   * Fix display of repos configured at absolute path locations.
 
  -- Joey Hess <joeyh@debian.org>  Sat, 10 Jan 2009 16:42:07 -0500
@@ -473,7 +540,7 @@ mr (0.34) unstable; urgency=low
 
 mr (0.33) unstable; urgency=low
 
-  * Add a push subcommand, which pushes committed changes for DCVS, and 
+  * Add a push subcommand, which pushes committed changes for DCVS, and
     does nothing for svn/cvs. Closes: #491865
 
  -- Joey Hess <joeyh@debian.org>  Tue, 22 Jul 2008 15:22:01 -0400
